@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:alpine
+    container_name: thermo_assistant_db
+    environment:
+      POSTGRES_USER: thermo_user
+      POSTGRES_PASSWORD: thermo_password
+      POSTGRES_DB: thermo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Next.js App (Development)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: thermo_web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      CHOKIDAR_USEPOLLING: "true"
+      DATABASE_URL: postgresql://thermo_user:thermo_password@postgres:5432/thermo_db
+      NEXTAUTH_SECRET: this-is-a-super-secret-key-for-nextauth
+      NEXTAUTH_URL: http://localhost:3000
+      GOOGLE_CLIENT_ID: this-is-a-super-secret-key-for-google-client-id
+      GOOGLE_CLIENT_SECRET: this-is-a-super-secret-key-for-google-client-secret
+      GEMINI_API_KEY: this-is-a-super-secret-key-for-gemini-api
+      GENERATIVE_LLM_MODEL: gemini-2.0-flash-exp
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    command: pnpm dev:docker
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
