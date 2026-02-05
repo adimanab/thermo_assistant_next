@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios, { AxiosError } from "axios";
-import Image from "next/image";
+
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -95,7 +95,7 @@ export default function SignUpPage() {
     );
   }
 
-  const providerButtonStyle = "w-full rounded-full h-12 text-md font-sans bg-input/20 border-input hover:bg-input/50 flex items-center justify-center space-x-3"
+
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -141,27 +141,9 @@ export default function SignUpPage() {
           </Link>
         </p>
 
-        <div className="relative my-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-input" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">OR</span>
-          </div>
-        </div>
 
-        <div className="space-y-3">
-          <Button
-            variant="outline"
-            size="lg"
-            className={providerButtonStyle}
-            onClick={() => signIn("google", { callbackUrl: "/" })}
-            disabled={isLoading}
-          >
-            <Image src={"/google-icon.svg"} alt={"Sign up with Google"} width={25} height={25} className="invert" />
-            <span>{"Sign up with Google"}</span>
-          </Button>
-        </div>
+
+
       </div>
     </div>
   );

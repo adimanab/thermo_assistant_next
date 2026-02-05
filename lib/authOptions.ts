@@ -1,6 +1,5 @@
 import { NextAuthOptions } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
@@ -28,17 +27,12 @@ export const authOptions: NextAuthOptions = {
         if (!isPasswordValid) return null;
 
         return {
-          id:     user.id,
-          name:   user.name,
-          email:  user.email,
-          image:  user.image ?? undefined,
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image ?? undefined,
         };
       },
-    }),
-
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
 
@@ -56,7 +50,7 @@ export const authOptions: NextAuthOptions = {
         token.image = user.image;
         const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
         token.isVerified = dbUser?.emailVerified !== null;
-      } 
+      }
       return token;
     },
 

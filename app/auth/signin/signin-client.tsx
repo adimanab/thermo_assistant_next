@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import Link from "next/link";
-import Image from "next/image";
+
 
 export const formSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -26,7 +26,7 @@ export const formSchema = z.object({
 export default function SigninClient() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/chat";
-  const providerButtonStyle = "w-full rounded space-x-5 h-12 text-md font-sans rounded-full bg-input/20 border-input hover:bg-input/50";
+
 
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm({
@@ -64,16 +64,7 @@ export default function SigninClient() {
     }
   };
 
-  const handleProviderSignIn = async (provider: string) => {
-    setIsLoading(true);
-    try {
-      await signIn(provider, { callbackUrl });
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -137,27 +128,9 @@ export default function SigninClient() {
           </Link>
         </div>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-input"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">OR</span>
-          </div>
-        </div>
 
-        <div className="space-y-3">
-          <Button
-            variant='outline'
-            size='lg'
-            className={providerButtonStyle}
-            onClick={() => handleProviderSignIn("google")}
-            disabled={isLoading}
-          >
-            <Image src='/google-icon.svg' alt="google logo" width={25} height={25} className="dark:invert-0 invert" />
-            <p>Sign in with Google</p>
-          </Button>
-        </div>
+
+
       </div>
     </div>
   );

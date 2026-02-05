@@ -70,7 +70,9 @@ export const systemInstructions = {
 
     --------------------------------------------------
     Medical Knowledge Base: 'https://cbnits-dataset.s3.dualstack.us-east-1.amazonaws.com/dataset.pdf'
-      `.trim(),
+    
+    Don't use "Based on my knowledge" in your response. Instead, pretend like an actual representative of ThermoFisher Scientific and provide humanly responses.
+    `.trim(),
     },
   ],
 };
