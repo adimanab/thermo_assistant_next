@@ -55,13 +55,21 @@ export async function generateTitle(
   ];
 
   try {
-    if (!process.env.GEMINI_TITLE_API_KEY || !process.env.GENERATIVE_LLM_MODEL) {
+    if (!process.env.GEMINI_TITLE_API_KEYS || !process.env.GENERATIVE_LLM_MODEL) {
       throw new Error("Missing gemini model or api key");
     }
+        
+    const allKeys = process.env.GEMINI_TITLE_API_KEYS;
+    const keys = allKeys.split(" - ");
+    let count = 0;
+    if (count >= keys.length) {
+      count = 0;
+    }
+    const key = keys[count++];
 
     const geminiModel = gemini({
-      apiKey: process.env.GEMINI_TITLE_API_KEY,
       model: process.env.GENERATIVE_LLM_MODEL,
+      apiKey: key,
     });
 
     const result = await geminiModel.generateContent({
