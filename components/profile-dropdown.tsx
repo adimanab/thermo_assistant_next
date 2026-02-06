@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
@@ -18,11 +18,28 @@ import {
 import { Palette, LogOut, Sun, Moon, Monitor, Check, ExternalLink, Lightbulb } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
+const bgColors = [
+  "bg-red-600", "bg-orange-600", "bg-amber-600", "bg-yellow-600", "bg-lime-600",
+  "bg-green-600", "bg-emerald-600", "bg-teal-600", "bg-cyan-600", "bg-sky-600",
+  "bg-blue-600", "bg-indigo-600", "bg-violet-600", "bg-purple-600", "bg-fuchsia-600",
+  "bg-pink-600", "bg-rose-600"
+];
+
 export function ProfileDropdown() {
   const session = useSession();
   const user = session.data?.user;
   const { setTheme, theme } = useTheme();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const randomColor = useMemo(() => {
+    const name = user?.name || "User";
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % bgColors.length;
+    return bgColors[index];
+  }, [user?.name]);
 
   return (
     <>
@@ -34,7 +51,7 @@ export function ProfileDropdown() {
               alt="user-profile"
               className="object-cover transition-all cursor-pointer"
             />
-            <AvatarFallback className="cursor-pointer bg-teal-600">
+            <AvatarFallback className={`cursor-pointer ${randomColor} text-white`}>
               {user?.name?.[0].toUpperCase() || "U"}
             </AvatarFallback>
           </Avatar>
