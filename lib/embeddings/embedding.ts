@@ -1,6 +1,7 @@
-import { pipeline, env } from "@huggingface/transformers";
+import { pipeline, env, FeatureExtractionPipeline } from "@huggingface/transformers";
 import path from "path";
 import fs from "fs";
+import { Result } from "@prisma/client/runtime/client";
 
 // 1. Force the library to be purely offline
 env.allowRemoteModels = false; 
@@ -8,7 +9,7 @@ const modelsPath = path.join(process.cwd(), "models");
 env.localModelPath = modelsPath;
 env.cacheDir = modelsPath;
 
-let extractorInstance: any = null;
+let extractorInstance: FeatureExtractionPipeline | null = null;
 
 export async function embedText(text: string): Promise<number[]> {
   // --- Debug Step: Check if local files exist ---
@@ -20,13 +21,15 @@ export async function embedText(text: string): Promise<number[]> {
   }
 
   if (!extractorInstance) {
-    console.log("🚀 Initializing local embedding singleton...");
+    // console.log("🚀 Initializing local embedding singleton...");
     try {
-      extractorInstance = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", {
+      const result = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", {
         dtype: 'q8', 
         device: 'cpu',
       });
-      console.log("✅ Extractor initialized successfully.");
+
+      extractorInstance = result as FeatureExtractionPipeline
+      // console.log("✅ Extractor initialized successfully.");
     } catch (err) {
       console.error("❌ Failed to initialize pipeline:", err);
       throw err;

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         const suggestions = await suggestQuestions(body.query, 3);
         console.log(suggestions)
 
-        return NextResponse.json({ suggestions });
+        return NextResponse.json(suggestions);
     } catch (error) {
         console.error("Suggestion API error:", error);
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
