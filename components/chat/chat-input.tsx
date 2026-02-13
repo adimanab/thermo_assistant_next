@@ -45,12 +45,14 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
         e.preventDefault();
         const nextIndex = (selectedIndex + 1) % suggestions.length;
         onSelectedIndexChange(nextIndex);
+        onChange(suggestions[nextIndex]);
       }
 
       if (e.key === "ArrowUp") {
         e.preventDefault();
         const prevIndex = (selectedIndex - 1 + suggestions.length) % suggestions.length;
         onSelectedIndexChange(prevIndex);
+        onChange(suggestions[prevIndex]);
       }
     };
 
@@ -97,7 +99,7 @@ export const ChatInput = forwardRef<HTMLTextAreaElement, ChatInputProps>(
               }
               onSelectedIndexChange(-1);
             }}
-            disabled={isLoading || !value.trim()}
+            disabled={isLoading || (!value.trim() && !(selectedIndex >= 0 && selectedIndex < suggestions.length))}
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

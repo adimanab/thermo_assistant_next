@@ -104,7 +104,7 @@ export function NewChatWelcome() {
             onSelectedIndexChange={setSelectedIndex}
             onSubmit={handleSubmit}
             isLoading={isSendingMessage}
-            placeholder="Describe the scientific concept you want to visualize..."
+            placeholder="Ask anything about  thermofisher scientific..."
           />
         </div>
 
@@ -130,7 +130,7 @@ export function NewChatWelcome() {
                   className="p-4 text-left border rounded-lg hover:bg-accent transition-colors md:h-24 h-20"
                   disabled={isSendingMessage}
                 >
-                  <h3 className="font-semibold text-sm mb-2">{example.title}</h3>
+                  <h3 className="font-semibold text-sm mb-2 truncate">{example.title}</h3>
                   <p className="text-xs text-muted-foreground line-clamp-2 overflow-hidden truncate">
                     {example.prompt}
                   </p>
